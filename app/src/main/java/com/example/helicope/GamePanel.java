@@ -3,6 +3,7 @@ package com.example.helicope;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -105,6 +106,27 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (!player.isPlaying() && newGameCreated && reset) {
+                player.setPlaying(true);
+                player.setUp(true);
+            }
+            if (player.isPlaying()) {
+                if (!started)
+                    started = true;
+
+                reset = false;
+                player.setUp(true);
+            }
+            return true;
+        }
+
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            player.setUp(false);
+            return true;
+        }
+
+
         return super.onTouchEvent(event);
     }
 
@@ -128,6 +150,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     }
     public void update(){
 
+    }
+
+    private boolean collision(GameObject a, GameObject b) {
+        if (Rect.intersects(a.getRectangle(), b.getRectangle())) {
+            return true;
+        }
+        return false;
     }
     public void setHighScoreListener(HighScoreListener listener) {
         this.mHighScoreListener = listener;
