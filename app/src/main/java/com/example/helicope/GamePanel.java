@@ -2,10 +2,13 @@ package com.example.helicope;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
@@ -23,6 +26,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     private ArrayList<BotBorder> botBorders;
     private long smokeStartTime;
     private long missileStartTime;
+    private Random rand = new Random();
+    private int maxBorderHeight;
+    private int minBorderHeight;
+    private boolean topDown = true;
+    private boolean botDown = true;
+    private boolean newGameCreated;
 
     private int progressDenominator = 20;
 
@@ -92,5 +101,35 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
+    }
+
+    @Override
+    public void draw(Canvas canvas) {
+        super.draw(canvas);
+    }
+    public void updateTopBorder(){
+
+    }
+
+    public void updateBottomBorder(){
+
+    }
+
+    public void newGame(){
+
+    }
+    public void drawText(Canvas canvas){
+
+    }
+    public void update(){
+
+    }
+    public void setHighScoreListener(HighScoreListener listener) {
+        this.mHighScoreListener = listener;
     }
 }
