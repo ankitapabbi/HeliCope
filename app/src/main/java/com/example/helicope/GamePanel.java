@@ -3,7 +3,10 @@ package com.example.helicope;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -207,7 +210,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     }
 
     public void updateBottomBorder(){
-       
+
         if (player.getScore() % 40 == 0) {
             botBorders.add(new BotBorder(BitmapFactory.decodeResource(getResources(), R.drawable.brick),
                     botBorders.get(botBorders.size() - 1).getX() + 20,
@@ -246,7 +249,26 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
     }
     public void drawText(Canvas canvas){
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(30);
 
+        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        canvas.drawText("DISTANCE: " + (player.getScore() * 3), 10, HEIGHT - 10, paint);
+        canvas.drawText(" LIFE: " + count, 205, HEIGHT - 10, paint);
+        canvas.drawText("HIGHEST: " + (bestScore * 3), WIDTH - 215, HEIGHT - 10, paint);
+
+        if (!player.isPlaying() && newGameCreated && reset) {
+            Paint paint1 = new Paint();
+            paint1.setTextSize(40);
+            paint1.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+            canvas.drawText("PRESS TO START", WIDTH / 2 - 50, HEIGHT / 2, paint1);
+            count = 5;
+
+            paint1.setTextSize(20);
+            canvas.drawText("PRESS AND HOLD TO GO UP", WIDTH / 2 - 50, HEIGHT / 2 + 20, paint1);
+            canvas.drawText("RELEASE TO GO DOWN", WIDTH / 2 - 50, HEIGHT / 2 + 40, paint1);
+        }
     }
     public void update(){
         if (player.isPlaying()) {
