@@ -246,6 +246,52 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     }
 
     public void newGame(){
+        if (player.getScore() > bestScore) {
+            bestScore = player.getScore();
+            if (mHighScoreListener != null)
+                mHighScoreListener.onHighScoreUpdated(bestScore);
+        }
+
+        disappear = false;
+        botBorders.clear();
+        topBorders.clear();
+        missiles.clear();
+        smokePuffs.clear();
+
+        minBorderHeight = 5;
+        maxBorderHeight = 30;
+        player.resetDY();
+        player.resetScore();
+        player.setY(HEIGHT / 2);
+
+        for (int i = 0; i * 20 < WIDTH + 40; i++) {
+
+            if (i == 0) {
+                topBorders.add(new TopBorder(BitmapFactory.decodeResource(getResources(), R.drawable.brick),
+                        i * 20, 0, 10));
+            } else {
+                topBorders.add(new TopBorder(BitmapFactory.decodeResource(getResources(), R.drawable.brick),
+                        i * 20, 0, topBorders.get(i - 1).getHeight() + 1));
+            }
+
+        }
+
+
+        for (int i = 0; i * 20 < WIDTH + 40; i++) {
+
+
+            if (i == 0) {
+                botBorders.add(new BotBorder(BitmapFactory.decodeResource(getResources(), R.drawable.brick),
+                        i * 20, HEIGHT - minBorderHeight));
+            }
+
+            else {
+                botBorders.add(new BotBorder(BitmapFactory.decodeResource(getResources(), R.drawable.brick),
+                        i * 20, botBorders.get(i - 1).getY() - 1));
+
+            }
+        }
+        newGameCreated = true;
 
     }
     public void drawText(Canvas canvas){
@@ -317,7 +363,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
             long missileElapsed = (System.nanoTime() - missileStartTime) / 1000000;
             if (missileElapsed > (2000 - player.getScore() / 4)) {
-                //first missile always goes down the middle
+
                 if (missiles.size() == 0) {
                     missiles.add(new Missile(BitmapFactory.decodeResource(getResources(),
                             R.drawable.missile), WIDTH + 10, HEIGHT / 2, 45, 15, player.getScore(), 13));
