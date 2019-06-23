@@ -8,9 +8,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
 
 
+
+
     public GamePanel(Context context, int best) {
         super(context);
     }
+
+
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
