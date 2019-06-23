@@ -133,6 +133,42 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
+        final float scaleFactorX = getWidth() / (WIDTH * 1.f);
+        final float scaleFactorY = getHeight() / (HEIGHT * 1.f);
+
+        if (canvas != null) {
+            final int savedState = canvas.save();
+
+            canvas.scale(scaleFactorX, scaleFactorY);
+            bg.draw(canvas);
+            if (!disappear)
+                player.draw(canvas);
+
+            for (SmokePuff sp : smokePuffs) {
+                sp.draw(canvas);
+            }
+
+            for (Missile m : missiles) {
+                m.draw(canvas);
+            }
+
+
+            for (TopBorder tb : topBorders) {
+                tb.draw(canvas);
+            }
+
+            for (BotBorder bb : botBorders) {
+                bb.draw(canvas);
+            }
+
+      
+            if (started) {
+                explosion.draw(canvas);
+            }
+            drawText(canvas);
+            canvas.restoreToCount(savedState);
+        }
+
     }
     public void updateTopBorder(){
 
@@ -163,17 +199,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
             bg.update();
             player.update();
 
-            //calculate the threshold of height the border can have based on the score
-            //max and min border heart are updated , and the border switched direction when either max or
-            //min is met
+
 
             maxBorderHeight = 30 + player.getScore() / progressDenominator;
-            //cap max border height so that borders can only take up a total of 1/2 the screen
+
             if (maxBorderHeight > HEIGHT / 4)
                 maxBorderHeight = HEIGHT / 4;
             minBorderHeight = 5 + player.getScore() / progressDenominator;
 
-            //check bottom border collision
+
             for (int i = 0; i < botBorders.size(); i++) {
                 if (collision(botBorders.get(i), player)) {
                     player.setPlaying(false);
@@ -181,7 +215,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                 }
             }
 
-            //check top border collision
             for (int i = 0; i < topBorders.size(); i++) {
                 if (collision(topBorders.get(i), player)) {
                     player.setPlaying(false);
@@ -189,13 +222,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                 }
             }
 
-            //update top border
+
             this.updateTopBorder();
 
-            //update bottom border
+
             this.updateBottomBorder();
 
-            //add missiles on timer
+
             long missileElapsed = (System.nanoTime() - missileStartTime) / 1000000;
             if (missileElapsed > (2000 - player.getScore() / 4)) {
                 //first missile always goes down the middle
@@ -207,10 +240,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                             R.drawable.missile), WIDTH + 10, (int) (rand.nextDouble() * (HEIGHT - (maxBorderHeight * 2)) + maxBorderHeight),
                             45, 15, player.getScore(), 13));
                 }
-                //reset timer
+
                 missileStartTime = System.nanoTime();
             }
-            //loop though every missile and check collision and remove
+
             for (int i = 0; i < missiles.size(); i++) {
                 //update missile
                 missiles.get(i).update();
@@ -229,7 +262,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                     }
 
                 }
-                //remove missile if it is way off the screen
+
                 if (missiles.get(i).getX() < -100) {
                     missiles.remove(i);
                     break;
@@ -237,7 +270,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                 }
             }
 
-            //add smoke puffs on timer
+
             long elapsed = (System.nanoTime() - smokeStartTime) / 1000000;
             if (elapsed > 120) {
                 smokePuffs.add(new SmokePuff(player.getX(), player.getY() + 10));
