@@ -1,6 +1,7 @@
 package com.example.helicope;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -20,6 +21,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     private ArrayList<Missile> missiles;
     private ArrayList<TopBorder> topBorders;
     private ArrayList<BotBorder> botBorders;
+    private long smokeStartTime;
+    private long missileStartTime;
 
     private int progressDenominator = 20;
 
@@ -46,6 +49,20 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        bg = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.grassbg1));
+        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.helicopter), 65, 25, 3);
+        smokePuffs = new ArrayList<SmokePuff>();
+        missiles = new ArrayList<Missile>();
+        topBorders = new ArrayList<TopBorder>();
+        botBorders = new ArrayList<BotBorder>();
+
+        smokeStartTime = System.nanoTime();
+        missileStartTime = System.nanoTime();
+
+        thread = new MainThread(getHolder(), this);
+
+        thread.setRunning(true);
+        thread.start();
 
     }
 
