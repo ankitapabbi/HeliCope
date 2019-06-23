@@ -10,7 +10,17 @@ public class Explosion {
     private Animation animation = new Animation();
 
     public Explosion(Bitmap res, int x, int y, int width, int height, int numFrames) {
+        this.x = x;
+        this.y = y;
+        Bitmap[] image = new Bitmap[numFrames];
 
+        for (int i = 0; i < image.length; i++) {
+            if (i % 5 == 0 && i > 0) row++;
+            image[i] = Bitmap.createBitmap(res, (i - (5 * row)) * width, row * height, width, height);
+
+        }
+        animation.setFrames(image);
+        animation.setDelay(10);
     }
 
     public void update() {
