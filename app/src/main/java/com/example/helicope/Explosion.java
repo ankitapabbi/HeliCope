@@ -21,7 +21,7 @@ public class Explosion {
 
     public void draw(Canvas canvas) {
         if ( !animation.isPlayedOnce()){
-            
+
         }
     }
 
