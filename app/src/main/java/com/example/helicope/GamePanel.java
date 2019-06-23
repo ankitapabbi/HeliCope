@@ -31,6 +31,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     private int bestScore;
     int count = 5;
 
+    private HighScoreListener mHighScoreListener;
+    public interface HighScoreListener {
+        void onHighScoreUpdated(int best);
+    }
+
+
 
     public GamePanel(Context context, int best) {
         super(context);
