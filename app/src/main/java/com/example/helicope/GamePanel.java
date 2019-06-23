@@ -41,8 +41,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
 
 
-    public GamePanel(Context context, int best) {
+    public GamePanel(Context context, int best)
+    {
         super(context);
+        this.bestScore = best;
+
+        this.mHighScoreListener = null;
+        getHolder().addCallback(this);
+        setFocusable(true);
     }
 
 
