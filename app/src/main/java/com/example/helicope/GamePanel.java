@@ -161,7 +161,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                 bb.draw(canvas);
             }
 
-      
+
             if (started) {
                 explosion.draw(canvas);
             }
@@ -172,10 +172,74 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     }
     public void updateTopBorder(){
 
+        if (player.getScore() % 50 == 0) {
+            topBorders.add(new TopBorder(BitmapFactory.decodeResource(getResources(), R.drawable.brick),
+                    topBorders.get(topBorders.size() - 1).getX() + 20, 0,
+                    (int) ((rand.nextDouble() * (maxBorderHeight)) + 1)));
+        }
+
+        for (int i = 0; i < topBorders.size(); i++) {
+            topBorders.get(i).update();
+            if (topBorders.get(i).getX() < -20) {
+                topBorders.remove(i);
+
+                if (topBorders.get(topBorders.size() - 1).getHeight() >= maxBorderHeight) {
+                    topDown = false;
+                }
+                if (topBorders.get(topBorders.size() - 1).getHeight() <= minBorderHeight) {
+                    topDown = true;
+                }
+
+
+                if (topDown) {
+                    topBorders.add(new TopBorder(BitmapFactory.decodeResource(getResources(),
+                            R.drawable.brick), topBorders.get(topBorders.size() - 1).getX() + 20,
+                            0, topBorders.get(topBorders.size() - 1).getHeight() + 1));
+                }
+
+                else {
+                    topBorders.add(new TopBorder(BitmapFactory.decodeResource(getResources(),
+                            R.drawable.brick), topBorders.get(topBorders.size() - 1).getX() + 20,
+                            0, topBorders.get(topBorders.size() - 1).getHeight() - 1));
+                }
+            }
+        }
     }
 
     public void updateBottomBorder(){
+       
+        if (player.getScore() % 40 == 0) {
+            botBorders.add(new BotBorder(BitmapFactory.decodeResource(getResources(), R.drawable.brick),
+                    botBorders.get(botBorders.size() - 1).getX() + 20,
+                    (int) ((rand.nextDouble() * maxBorderHeight) + (HEIGHT - maxBorderHeight))));
+        }
 
+
+        for (int i = 0; i < botBorders.size(); i++) {
+            botBorders.get(i).update();
+
+
+            if (botBorders.get(i).getX() < -20) {
+                botBorders.remove(i);
+
+
+                if (botBorders.get(botBorders.size() - 1).getY() <= HEIGHT - maxBorderHeight) {
+                    botDown = true;
+                }
+                if (botBorders.get(botBorders.size() - 1).getY() >= HEIGHT - minBorderHeight) {
+                    botDown = false;
+                }
+
+                if (botDown) {
+                    botBorders.add(new BotBorder(BitmapFactory.decodeResource(getResources(), R.drawable.brick),
+                            botBorders.get(botBorders.size() - 1).getX() + 20, botBorders.get(botBorders.size() - 1).getY() + 1));
+
+                } else {
+                    botBorders.add(new BotBorder(BitmapFactory.decodeResource(getResources(), R.drawable.brick),
+                            botBorders.get(botBorders.size() - 1).getX() + 20, botBorders.get(botBorders.size() - 1).getY() - 1));
+                }
+            }
+        }
     }
 
     public void newGame(){
