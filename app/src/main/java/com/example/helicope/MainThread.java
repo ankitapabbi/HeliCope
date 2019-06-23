@@ -1,5 +1,6 @@
 package com.example.helicope;
 
+import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
 public class MainThread extends Thread {
@@ -8,6 +9,7 @@ public class MainThread extends Thread {
     private boolean running;
     private SurfaceHolder surfaceHolder;
     private GamePanel gamePanel;
+    private static Canvas canvas;
 
     public MainThread(SurfaceHolder surfaceHolder, GamePanel gamePanel) {
         super();
@@ -25,7 +27,39 @@ public class MainThread extends Thread {
         long targetTime = 1000 / FPS;
 
         while (running){
-            
+            startTime = System.nanoTime();
+            canvas = null;
+            try {
+                canvas = this.surfaceHolder.lockCanvas();
+                synchronized (surfaceHolder) {
+                   // this.gamePanel.update();
+                    this.gamePanel.draw(canvas);
+                }
+            } catch (Exception e) {
+            } finally {
+                if (canvas != null) {
+                    try {
+                        surfaceHolder.unlockCanvasAndPost(canvas);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+
+            timeMillis = (System.nanoTime() - startTime) / 1000000;
+            waitTime = targetTime - timeMillis;
+
+            try {
+                this.sleep(waitTime);
+            } catch (Exception e) {
+            }
+
+            frameCount++;
+            if (frameCount == FPS) {
+                frameCount = 0;
+            }
+
         }
     }
 }
